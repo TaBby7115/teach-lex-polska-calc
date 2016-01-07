@@ -33,7 +33,7 @@ void my_stack_done(my_stack* stack)
     free(stack->ptr);
 }
 
-void my_stack_push(my_stack* stack, int value)
+void my_stack_push(my_stack* stack, double value)
 {
     if (stack->count >= stack->size) {
         return;
@@ -41,7 +41,7 @@ void my_stack_push(my_stack* stack, int value)
     stack->ptr[stack->count++] = value;
 }
 
-int my_stack_pull(my_stack* stack)
+double my_stack_pull(my_stack* stack)
 {
     if (stack->count == 0) {
         return -1;
@@ -49,7 +49,7 @@ int my_stack_pull(my_stack* stack)
     return stack->ptr[--stack->count];
 }
 
-int my_stack_top(my_stack* stack)
+double my_stack_top(my_stack* stack)
 {
     if (stack->count == 0) {
         return -1;
