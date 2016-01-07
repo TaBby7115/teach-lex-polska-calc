@@ -39,9 +39,48 @@ int end_file;
 %s SKIPERROR
 
 digit     [0-9]
-number    {digit}+
+number    (-?{digit}+\.?{digit}*)+
+set     \[({number}(\,{number})*)?\]
 
 %%
+{set} {		  
+		  fprintf(stderr, "found set\n");}
+{set}.{number}.\? 	{
+		  	char *i = yytext;
+		  	j = 0;
+		  	while (*i != ']') {
+		   		if (isdigit(*i)) {
+	      				if(*(i-1) != '-') {
+	        				set[j] = strtod(i, &i);}
+	      				else {
+	       					set[j] = strtod(i, &i) * -1;}
+	    						if(isinteger(set[j])){
+	    	  						fprintf(stderr, "found \"%d\" from set\n", (int)set[j]);}
+	     						else {
+	    	  						fprintf(stderr, "found \"%.2f\" from set\n", set[j]);}
+		  						j++;
+			 				}
+			 	else {
+			  		i++;
+			 		}
+		  		}
+	    		while (*i) {
+		     		if (isdigit(*i)) {
+	     	   			if(*(i-1) != '-') {
+			   			set[j] = strtod(i, &i);}
+			 		else {
+			   			set[j] = strtod(i, &i) * -1;}
+			 			if(isinteger(set[j])){
+		     	     				fprintf(stderr, "found \"%d\" to add to set\n", (int)set[j]);}
+		     	   			else{
+		     	     				fprintf(stderr, "found \"%.2f\" to add to set\n", set[j]);}
+		     	   			j++;
+			     		}
+			     	else {
+			    		i++;
+			     	}
+		   	}	  
+		  	return LexEntry;}
 
 {number}	{
 		  int_value=atoi(yytext);
