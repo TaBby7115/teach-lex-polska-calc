@@ -326,8 +326,33 @@ int calc_line()
         return 0;
     }
 
-    int result = my_stack_pull(&stack);
-    fprintf(yyout, "%d ", result);
+    if( (stack.count == 2) && (my_stack_pull(&stack) == TYPE_NUMBER) ) {
+	      	double result = my_stack_pull(&stack);
+		if(isinteger(result)){
+	      		fprintf(yyout, "%d ", (int)result);}
+	    	else{
+	    	    	fprintf(yyout, "%.2f ", result);}
+		}
+	else if( (stack.count > 2) && (my_stack_pull(&stack) == TYPE_SET) ) {
+	    	k = 0;
+	    	fprintf(yyout, "set(%d, ",(int)my_stack_pull(&stack));
+	    	while (stack.count) {
+	    	  	set[k] = my_stack_pull(&stack);
+	    	  	k++;
+	    	}
+	    	k--;
+	    	while (k) {
+	    	  	if(isinteger(set[k])){
+	    	    		fprintf(yyout, "%d, ", (int)set[k]);}
+	    	  	else{
+	    	    		fprintf(yyout, "%.2f, ", set[k]);}
+	    	  		k--;
+	    	}
+	    	if(isinteger(set[k])){
+	    	    fprintf(yyout, "%d) ", (int)set[k]);}
+	  	else{
+	  	    fprintf(yyout, "%.2f) ", set[k]);}
+	}
 
     if (!my_stack_is_empty(&stack)) {
         fprintf(stderr, "Stack not empty after calculation\n");
