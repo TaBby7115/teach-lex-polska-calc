@@ -83,6 +83,41 @@ set     \[({number}(\,{number})*)?\]
 		   	}	  
 		  	return LexEntry;}
 
+{set}.{set}.\* {
+		   	char* i = yytext;
+		  	j = 0;
+			k=0;
+		  	while (*i != ']') {
+		    		if(isdigit(*i)){
+		      			if(*(i-1) != '-') {
+		      				set[j] = strtod(i, &i);}
+		      			else {
+		        			set[j] = strtod(i, &i) * -1;}
+		      				if(isinteger(set[j])){
+		        				fprintf(stderr, "found \"%d\" from 1st set\n", (int)set[j]);}
+		      				else {
+		        				fprintf(stderr, "found \"%.2f\" from 1st set\n", set[j]);}
+		      				j++;}
+		    		else {
+		      			i++;}
+		  	}
+		  	i++;
+		  	while (*i != ']') {
+		    		if(isdigit(*i)){
+		      			if(*(i-1) != '-') {
+		      				set2[k] = strtod(i, &i);}
+		      			else {
+		        			set2[k] = strtod(i, &i) * -1;}
+		      				if(isinteger(set2[k])){
+		        				fprintf(stderr, "found \"%d\" from 2nd set\n", (int)set2[k]);}
+		      				else {
+		        				fprintf(stderr, "found \"%.2f\" from 2nd set\n", set2[k]);}
+		      					k++;}
+		    		else {
+		      			i++;}
+		  	}
+		  	return LexEntersection;}
+
 {number}	{
 		  int_value=atoi(yytext);
 		  fprintf(stderr, "found %d\n", int_value);
