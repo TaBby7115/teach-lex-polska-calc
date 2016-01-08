@@ -125,6 +125,9 @@ set     \[({number}(\,{number})*)?\]
 		else{
   	    		fprintf(stderr, "found %.2f\n", value);}	
 		return LexNumber; }
+\?		{
+          fprintf(stderr, "entry\n");
+ 	      return LexEntry; }
 \+		{
 		  fprintf(stderr, "plus\n");
 		  return LexPlus; }
