@@ -298,7 +298,39 @@ int isinteger(double n)
 		if (my_stack_is_full(&stack)) {
 		    return -1;
 		}
-		break;}			
+		break;}		
+		case LexEntersection:{
+		int c, y = 0;
+		int i;
+		double set3[100];
+		for (i = 0; i < j; i++){ 
+			while (set2[k] !== set[j] && j < k) j++;
+			while (set3[y] !== set[j] && y < c) y++;
+			if (j != k && y == c) set3[c++] = set[i];
+		}
+		return set3;
+
+		if (my_stack_is_empty(&stack)) {
+			return -1;
+		}
+		
+		double set3 = my_stack_pull(&stack);
+		if (set3 != TYPE_SET) {
+			return -1;
+		}
+		if (my_stack_is_empty(&stack)) {
+			return -1;
+		}
+		my_stack_push(&stack, TYPE_SET);
+		if (my_stack_is_full(&stack)) {
+		    return -1;
+		}
+		if (my_stack_is_full(&stack)) {
+		    return -1;
+		}
+		break;}	
+
+		
 	    case LexEnd:
 		if(stack.count == 1){         
 		  	my_stack_push(&stack, TYPE_NUMBER);
