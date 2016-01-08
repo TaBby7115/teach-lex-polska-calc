@@ -28,12 +28,19 @@ typedef enum {
     LexMult,
     LexEnd,
     LexUnknown,
+	LexSet,
+    LexEntry,
+    LexEntersection,
 } LexType;
 
 my_stack stack;
 
+double value;
+int k;
 int end_file;
-
+double set[100];
+double set2[100];
+int j,k;
 %}
 
 %s SKIPERROR
