@@ -152,90 +152,155 @@ set     \[({number}(\,{number})*)?\]
 <SKIPERROR>[^\n]* {}
 %%
 
-int process_command(int token)
+int isinteger(double n)
 {
-    fprintf(stderr, "token: %d\n", token);
+    return n - (double)(int)n == 0.0;
+}
 
-    switch (token) {
-    case LexNumber:
-        my_stack_push(&stack, int_value);
-        if (my_stack_is_full(&stack)) {
-            return -1;
-        }
-        break;
-    case LexPlus: {
-        if (my_stack_is_empty(&stack)) {
-            return -1;
-        }
-        int a=my_stack_pull(&stack);
+        int process_command(int token)
+	{
+	    fprintf(stderr, "token: %d\n", token);
+
+	    switch (token) {
+	    case LexSet:
+		      while(k != j)
+		      {
+		       	my_stack_push(&stack, set[k]);
+		      	k++;
+		      }
+		      my_stack_push(&stack, j);
+		      my_stack_push(&stack, TYPE_SET);
+		if (my_stack_is_full(&stack)) {
+		    return -1;
+		}
+		break;
+	    case LexNumber:
+		my_stack_push(&stack, value);
+		if (my_stack_is_full(&stack)) {
+		    return -1;
+		}
+		break;
+	    case LexPlus: {
+		if (my_stack_is_empty(&stack)) {
+		    return -1;
+		}
+		double a=my_stack_pull(&stack);
 
         if (my_stack_is_empty(&stack)) {
-            return -1;
-        }
-        int b=my_stack_pull(&stack);
+		    return -1;
+		}
+		double b=my_stack_pull(&stack);
 
         my_stack_push(&stack, a+b);
-        if (my_stack_is_full(&stack)) {
-            return -1;
-        }
-        break;}
-    case LexMinus: {
-        if (my_stack_is_empty(&stack)) {
-            return -1;
-        }
-        int a=my_stack_pull(&stack);
+		if (my_stack_is_full(&stack)) {
+		    return -1;
+		}
+		break;}
+	    case LexMinus: {
+		if (my_stack_is_empty(&stack)) {
+		    return -1;
+		}
+		double a=my_stack_pull(&stack);
 
         if (my_stack_is_empty(&stack)) {
-            return -1;
-        }
-        int b=my_stack_pull(&stack);
+		    return -1;
+		}
+		double b=my_stack_pull(&stack);
 
         my_stack_push(&stack, b-a);
-        if (my_stack_is_full(&stack)) {
-            return -1;
-        }
-        break;}
-    case LexDiv: {
-        if (my_stack_is_empty(&stack)) {
-            return -1;
-        }
-        int a=my_stack_pull(&stack);
+		if (my_stack_is_full(&stack)) {
+		    return -1;
+		}
+		break;}
+	    case LexDiv: {
+		if (my_stack_is_empty(&stack)) {
+		    return -1;
+		}
+		double a=my_stack_pull(&stack);
+
 
         if (my_stack_is_empty(&stack)) {
-            return -1;
-        }
-        int b=my_stack_pull(&stack);
+		    return -1;
+		}
+		double b=my_stack_pull(&stack);
+
 
         my_stack_push(&stack, b/a);
-        if (my_stack_is_full(&stack)) {
-            return -1;
-        }
-        break;}
-    case LexMult: {
-        if (my_stack_is_empty(&stack)) {
-            return -1;
-        }
-        int a=my_stack_pull(&stack);
+		if (my_stack_is_full(&stack)) {
+		    return -1;
+		}
+		break;}
+	    case LexMult: {
+		if (my_stack_is_empty(&stack)) {
+			return -1;
+		}
+		double a=my_stack_pull(&stack);
+		if (my_stack_is_empty(&stack)) {
+			return -1;
+		}
+		double b=my_stack_pull(&stack);
 
-        if (my_stack_is_empty(&stack)) {
-            return -1;
-        }
-        int b=my_stack_pull(&stack);
+    my_stack_push(&stack, b*a);
+		if (my_stack_is_full(&stack)) {
+			return -1;
+		}
+		break;}
+	    case LexEntry: {
+		if (my_stack_is_empty(&stack)) {
+		    return -1;
+		}
+		
+		double type1=my_stack_pull(&stack);
+		if ( type1 != TYPE_NUMBER) {
+		    return -1;
+		}
+		
+		double myNumber = my_stack_pull(&stack);
+		if (my_stack_is_empty(&stack)) {
+		    return -1;
+		}
+		
+		double type2=my_stack_pull(&stack);
+		if (type2 != TYPE_SET) {
+		    return -1;
+		}		
+		
+		int entry = 0;
+		if(my_stack_pull(&stack) == TYPE_SET)
+		{
+			int i;
+			int n = my_stack_pull(&stack);
+			for(i = 0; n == my_stack_pull(&stack) - 1; i++)
+			{
+				if(n == my_stack_pull(&stack)-1)
+				{
+				entry = 0;
+					return 1;
+					}
+				else {
+					entry = 1;}
+			}
+			return 0;
+		}
+		my_stack_push(&stack, entry);
+		my_stack_push(&stack, TYPE_NUMBER);
+		
+		if (my_stack_is_full(&stack)) {
+		    return -1;
+		}
+		break;}			
+	    case LexEnd:
+		if(stack.count == 1){         
+		  	my_stack_push(&stack, TYPE_NUMBER);
+		}
+	    case 0:
+		return 0;
+	    case LexUnknown:
+		return -1;
 
-        my_stack_push(&stack, b*a);
-        if (my_stack_is_full(&stack)) {
-            return -1;
-        }
-        break;}
-    case LexEnd:
-    case 0:
-        return 0;
-    case LexUnknown:
-        return -1;
-
-    }
-    return 1;
-}
+	    }
+	    return 1;
+	}
 
 int calc_line()
 {
