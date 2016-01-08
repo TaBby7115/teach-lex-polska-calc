@@ -119,9 +119,12 @@ set     \[({number}(\,{number})*)?\]
 		  	return LexEntersection;}
 
 {number}	{
-		  int_value=atoi(yytext);
-		  fprintf(stderr, "found %d\n", int_value);
-		  return LexNumber; }
+		value=strtod(yytext, &yytext);
+		if(isinteger(value)){
+				fprintf(stderr, "found %d\n", (int)value);}
+		else{
+  	    		fprintf(stderr, "found %.2f\n", value);}	
+		return LexNumber; }
 \+		{
 		  fprintf(stderr, "plus\n");
 		  return LexPlus; }
